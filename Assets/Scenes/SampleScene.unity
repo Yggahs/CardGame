@@ -140,7 +140,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b3881999cafe4564b9edf91ca648ec58, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentText: {fileID: 0}
+  currentText: {fileID: 1790101556}
 --- !u!4 &59318941
 Transform:
   m_ObjectHideFlags: 0
@@ -1403,6 +1403,12 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1790101556 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 114164196890791960, guid: 8425664955b74904188fbe93bb04736d,
+    type: 2}
+  m_PrefabInternal: {fileID: 1996210724}
+  m_Script: {fileID: 708705254, guid: f70555f144d8491a825f0804e09c671c, type: 3}
 --- !u!1 &1953640978
 GameObject:
   m_ObjectHideFlags: 0
