@@ -4,71 +4,102 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class Manager : MonoBehaviour {
-    bool DrawPhase = false;
-    bool MainPhase1 = false;
-    bool BattlePhase = false;
-    bool MainPhase2 = false;
-    bool EndPhase = false;
-    string currentPhase;
+    enum Turn
+    {
+        ComputerTurn,
+        PlayerTurn
+    }
+    enum Phases
+    {
+     DrawPhase,
+     MainPhase1,
+     BattlePhase,
+     MainPhase2,
+     EndPhase,
+    }
+    Phases currentPhase;
+    Turn currentTurn;
+
+
+    int Player1Health = 0;
+    int Player2Health = 0;
+
 
     public Text currentText = null;
 
-
-	// Use this for initialization
-	void Awake () {
-        
-        DrawPhase = true;
-        currentPhase = "DrawPhase";
-        
+    private Phases CurrentPhase {
+        get
+        {
+            return currentPhase;
+        }
+        set {
+            currentPhase = value;
+            UpdateText();
+        }
     }
 
-    private void Start()
+    private Turn CurrentTurn
     {
-        ChangeText(currentPhase);
+        get
+        {
+            return currentTurn;
+        }
+
+        set
+        {
+            currentTurn = value;
+            UpdateText();
+        }
     }
+
+
+    // Use this for initialization
+    public void Start () {
+        Player1Health = 20;
+        Player2Health = 20;
+        currentPhase = Phases.DrawPhase;
+        
+    }
+    
     public void ChangePhase()
     {
-        
-        ChangeText(currentPhase);
-        if (DrawPhase && !MainPhase1 && !BattlePhase && !MainPhase2 && !EndPhase)
+        if (CurrentTurn == Turn.ComputerTurn)
         {
-            DrawPhase = false;
-            MainPhase1 = true;
-            currentPhase = "MainPhase1";
-            
+            CurrentTurn = Turn.PlayerTurn;
+            CurrentPhase = Phases.DrawPhase;
+            return;
         }
-        else if (!DrawPhase && MainPhase1 && !BattlePhase && !MainPhase2 && !EndPhase)
+        switch (CurrentPhase)
         {
-            MainPhase1 = false;
-            BattlePhase = true;
-            currentPhase = "BattlePhase";
-            
-        }
-        else if (!DrawPhase && !MainPhase1 && BattlePhase && !MainPhase2 && !EndPhase)
-        {
-            BattlePhase = false;
-            MainPhase2 = true;
-            currentPhase = "MainPhase2";
-            
-        }
-        else if (!DrawPhase && !MainPhase1 && !BattlePhase && MainPhase2 && !EndPhase)
-        {
-            MainPhase2 = false;
-            EndPhase = true;
-            currentPhase = "EndPhase";
-            
-        }
-        else if(!DrawPhase && !MainPhase1 && !BattlePhase && !MainPhase2 && EndPhase)
-        {
-            EndPhase = false;
-            currentPhase = "Not your turn!";
-        }
-        else
-        {
-            DrawPhase = true;
-            currentPhase = "DrawPhase";
+          
+            case Phases.DrawPhase:
+                CurrentPhase = Phases.MainPhase1;
+                break;
+            case Phases.MainPhase1:
+                CurrentPhase = Phases.BattlePhase;
+                break;
+            case Phases.BattlePhase:
+                CurrentPhase = Phases.MainPhase2;
+                break;
+            case Phases.MainPhase2:
+                CurrentPhase = Phases.EndPhase;
+                break;
+            case Phases.EndPhase:
+                CurrentPhase = Phases.DrawPhase;
+                CurrentTurn = CurrentTurn == Turn.ComputerTurn ? Turn.PlayerTurn : Turn.ComputerTurn;
+                break;
         }
         
+    }
+    public void UpdateText()
+    {
+        if (CurrentTurn == Turn.ComputerTurn)
+        {
+            currentText.text = "Not your turn";
+        } else
+        {
+            currentText.text = CurrentPhase.ToString();
+        }
     }
     public void ChangeText(string word)
     {
